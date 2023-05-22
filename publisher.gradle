@@ -1,0 +1,129 @@
+apply plugin: 'maven-publish'
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    if (project.plugins.findPlugin("com.android.library")) {
+        // For Android libraries
+        from android.sourceSets.main.java.srcDirs
+        from android.sourceSets.main.kotlin.srcDirs
+    } else {
+        // For pure Kotlin libraries, in case you have them
+        from sourceSets.main.java.srcDirs
+        from sourceSets.main.kotlin.srcDirs
+    }
+}
+
+artifacts {
+    archives androidSourcesJar
+}
+
+ext["github_write_username"] = "test"
+ext["github_write_token"] = "test"
+
+File credsFile = project.rootProject.file("credentials.properties")
+if(credsFile.exists()) {
+    Properties p = new Properties()
+    p.load(new FileInputStream(credsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            // The coordinates of the library, being set from variables that
+            // we'll set up later
+            groupId LIB_GROUP_ID
+            artifactId LIB_ARTIFACT_ID
+            version LIB_VERSION
+
+            // Two artifacts, the `aar` (or `jar`) and the sources
+            if (project.plugins.findPlugin("com.android.library")) {
+                artifact("$buildDir/outputs/aar/${artifactId}-release.aar")
+            } else {
+                artifact("$buildDir/libs/${artifactId}-${version}.jar")
+            }
+            artifact androidSourcesJar
+
+            pom {
+                name = LIB_ARTIFACT_ID
+                description = LIB_DESCRIPTION
+                url = 'https://github.com/edwnmrtnz/amaterasu'
+
+                licenses {
+                    license {
+                        name = 'Apache-2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'edwnmrtnz'
+                        name = 'Edwin Martinez'
+                        email = 'dev.edwinmartinez@gmail.com'
+                    }
+                }
+
+                withXml {
+                    final dependenciesNode = asNode().appendNode('dependencies')
+
+                    ext.addDependency = { Dependency dep, String scope ->
+                        if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified")
+                            return // invalid dependencies should be ignored
+
+                        final dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('artifactId', dep.name)
+
+                        if (dep.version == 'unspecified') {
+                            dependencyNode.appendNode('groupId', project.ext.pomGroupID)
+                            dependencyNode.appendNode('version', project.ext.pomVersion)
+                            System.println("${project.ext.pomGroupID} ${dep.name} ${project.ext.pomVersion}")
+                        } else {
+                            dependencyNode.appendNode('groupId', dep.group)
+                            dependencyNode.appendNode('version', dep.version)
+                            System.println("${dep.group} ${dep.name} ${dep.version}")
+                        }
+
+                        dependencyNode.appendNode('scope', scope)
+                        // Some dependencies may have types, such as aar, that should be mentioned in the POM file
+                        def artifactsList = dep.properties['artifacts']
+                        if (artifactsList != null && artifactsList.size() > 0) {
+                            final artifact = artifactsList[0]
+                            dependencyNode.appendNode('type', artifact.getType())
+                        }
+
+                        if (!dep.transitive) {
+                            // In case of non transitive dependency, all its dependencies should be force excluded from them POM file
+                            final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+                            exclusionNode.appendNode('groupId', '*')
+                            exclusionNode.appendNode('artifactId', '*')
+                        } else if (!dep.properties.excludeRules.empty) {
+                            // For transitive with exclusions, all exclude rules should be added to the POM file
+                            final exclusions = dependencyNode.appendNode('exclusions')
+                            dep.properties.excludeRules.each { ExcludeRule rule ->
+                                final exclusionNode = exclusions.appendNode('exclusion')
+                                exclusionNode.appendNode('groupId', rule.group ?: '*')
+                                exclusionNode.appendNode('artifactId', rule.module ?: '*')
+                            }
+                        }
+                    }
+                    configurations.api.getDependencies().each { dep -> addDependency(dep, "compile") }
+                    configurations.implementation.getDependencies().each { dep -> addDependency(dep, "runtime") }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/edwnmrtnz/amaterasu"
+            credentials {
+                username = github_write_username
+                password = github_write_password
+            }
+        }
+    }
+}
