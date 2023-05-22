@@ -18,7 +18,7 @@ artifacts {
 }
 
 ext["github_write_username"] = "test"
-ext["github_write_token"] = "test"
+ext["github_write_password"] = "test"
 
 File credsFile = project.rootProject.file("credentials.properties")
 if(credsFile.exists()) {
@@ -65,6 +65,13 @@ publishing {
                         email = 'dev.edwinmartinez@gmail.com'
                     }
                 }
+
+                scm {
+                    connection = 'scm:git@github.com:edwnmrtnz/amaterasu.git'
+                    developerConnection = 'scm:git@github.com:edwnmrtnz/amaterasu.git'
+                    url = 'git@github.com:edwnmrtnz/amaterasu.git'
+                }
+
 
                 withXml {
                     final dependenciesNode = asNode().appendNode('dependencies')
