@@ -12,8 +12,8 @@ function main() {
     if [ ! -d "$module" ]; then
       echo "Please specify a valid module"
     else
-        #should_be_library
-        #should_have_clean_git
+        should_be_library
+        should_have_clean_git
         show_deploying_message
         unit_test
         upload
