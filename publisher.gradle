@@ -37,7 +37,7 @@ publishing {
 
             // Two artifacts, the `aar` (or `jar`) and the sources
             if (project.plugins.findPlugin("com.android.library")) {
-                artifact("$buildDir/outputs/aar/${artifactId}-release.aar")
+                artifact("$buildDir/outputs/aar/${project.name}-release.aar")
             } else {
                 artifact("$buildDir/libs/${artifactId}-${version}.jar")
             }
