@@ -1,0 +1,29 @@
+
+ext {
+    LIB_GROUP_ID = 'net.github.amaterasu'
+    LIB_ARTIFACT_ID = 'instrumentedtest'
+    LIB_VERSION = file('version.txt').text.trim()
+    LIB_DESCRIPTION = 'Testing utilities for local'
+}
+
+apply from: "${rootProject.projectDir}/publisher.gradle"
+
+dependencies {
+    api 'com.squareup.okhttp3:mockwebserver:4.9.3'
+
+    api "androidx.test:core-ktx:1.5.0"
+
+    // AndroidJUnitRunner and JUnit Rules
+    api 'androidx.test:runner:1.5.2'
+    api 'androidx.test:rules:1.5.0'
+
+    //assertions
+    api "androidx.test.ext:junit:1.1.5"
+    api "androidx.test.ext:truth:1.5.0"
+
+    //Espresso
+    api 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Must be included in the production
+    api "androidx.test.espresso:espresso-idling-resource:3.5.1"
+}

@@ -13,6 +13,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/androidutils" />
             <option value="$PROJECT_DIR$/scopey" />
+            <option value="$PROJECT_DIR$/testing-instrumented" />
+            <option value="$PROJECT_DIR$/testing-local" />
             <option value="$PROJECT_DIR$/testingutils" />
           </set>
         </option>
