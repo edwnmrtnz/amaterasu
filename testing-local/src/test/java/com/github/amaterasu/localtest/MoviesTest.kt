@@ -1,8 +1,7 @@
 
-package com.github.amaterasu.testingutils
+package com.github.amaterasu.localtest
 
 import com.google.common.truth.Truth.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
 import org.mockito.Mockito
 
@@ -28,8 +27,8 @@ class MoviesTest {
 
         sut.execute(page = 1)
 
-        val captor = argumentCaptor<Map<String, String>>()
-        Mockito.verify(repo).fetch(capture(captor))
+        val captor = com.github.amaterasu.localtest.argumentCaptor<Map<String, String>>()
+        Mockito.verify(repo).fetch(com.github.amaterasu.localtest.capture(captor))
         val params = captor.value
         assertThat(params["status"]).isEqualTo("active")
     }

@@ -1,4 +1,4 @@
-package com.github.amaterasu.testingutils
+package com.github.amaterasu.localtest
 
 /*
  * Copyright 2017, The Android Open Source Project

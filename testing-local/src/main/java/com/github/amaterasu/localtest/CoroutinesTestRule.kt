@@ -1,4 +1,4 @@
-package com.github.amaterasu.testingutils
+package com.github.amaterasu.localtest
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
