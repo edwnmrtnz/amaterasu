@@ -14,7 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "amaterasu"
 include ':androidutils'
-include ':testingutils'
 include ':scopey'
 include ':testing-local'
 include ':testing-instrumented'
