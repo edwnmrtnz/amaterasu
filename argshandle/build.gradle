@@ -5,18 +5,17 @@ plugins {
 
 ext {
     LIB_GROUP_ID = 'net.github.amaterasu'
-    LIB_ARTIFACT_ID = 'androidutils'
+    LIB_ARTIFACT_ID = 'argshandle'
     LIB_VERSION = file('version.txt').text.trim()
     LIB_DESCRIPTION = 'Small Android Specific Helpers'
 }
 
 apply from: "${rootProject.projectDir}/publisher.gradle"
 android {
-    namespace 'com.github.amaterasu.androidutils'
+    namespace 'com.github.amaterasu.argshandle'
 }
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'
     implementation("androidx.fragment:fragment-ktx:1.5.7")
-    implementation "androidx.activity:activity-ktx:1.7.2"
 }

@@ -27,8 +27,8 @@ class MoviesTest {
 
         sut.execute(page = 1)
 
-        val captor = com.github.amaterasu.localtest.argumentCaptor<Map<String, String>>()
-        Mockito.verify(repo).fetch(com.github.amaterasu.localtest.capture(captor))
+        val captor = argumentCaptor<Map<String, String>>()
+        Mockito.verify(repo).fetch(capture(captor))
         val params = captor.value
         assertThat(params["status"]).isEqualTo("active")
     }
