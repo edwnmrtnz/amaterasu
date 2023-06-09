@@ -46,7 +46,7 @@ publishing {
             pom {
                 name = LIB_ARTIFACT_ID
                 description = LIB_DESCRIPTION
-                url = 'https://gitlab.nweca.com/android-team/nueca-android-toolbox'
+                url = 'https://github.com/edwnmrtnz/amaterasu.git'
 
                 withXml {
                     final dependenciesNode = asNode().appendNode('dependencies')

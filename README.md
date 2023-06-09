@@ -8,7 +8,7 @@ As of now, amaterasu libraries are published via Github Package Registry and as 
 2. Create a properties file, place it in your project's root folder, and add it to .gitignore. e.g github.properties 
 3. Inside build.gradle properties.
 ```groovy
-def githubProperties = new Properties() githubProperties.load(new FileInputStream(rootProject.file(“github.properties”)))
+def githubProperties = new Properties() githubProperties.load(new FileInputStream(rootProject.file("github.properties")))
 repositories {
     maven {
         name = "GitHubPackages"
@@ -23,7 +23,7 @@ repositories {
 4. Import it as dependency
 ```
 dependencies {
-    implementation ‘com.github.amaterasu.testinglibs:v1.0’
+    implementation ‘com.github.amaterasu.androidutils:{version}’
 }
 ```
 
