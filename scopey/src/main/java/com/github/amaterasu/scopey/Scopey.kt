@@ -7,16 +7,16 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 
 inline fun <reified T> ViewModelStoreOwner.scopey(noinline creator: () -> T): Lazy<T> {
-    return LazyScopedValue({ viewModelStore }, { ScopyViewModel.Factory(creator) })
+    return LazyScopedValue({ viewModelStore }, { ScopeyViewModel.Factory(creator) })
 }
 
-class ScopyViewModel<V>(
+class ScopeyViewModel<V>(
     val value: V
 ) : ViewModel() {
     class Factory<V>(val valueFactory: () -> V) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            ScopyViewModel(valueFactory()) as? T
+            ScopeyViewModel(valueFactory()) as? T
                 ?: throw java.lang.IllegalArgumentException("Unknown type")
     }
 }
@@ -34,7 +34,7 @@ class LazyScopedValue<T : Any>(
             return if (value == NotSet) {
                 val factory = factoryProducer()
                 val store = storeProducer()
-                val viewModel = ViewModelProvider(store, factory).get<ScopyViewModel<T>>()
+                val viewModel = ViewModelProvider(store, factory).get<ScopeyViewModel<T>>()
 
                 viewModel.value.also { cached = it }
             } else {
