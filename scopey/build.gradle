@@ -4,7 +4,7 @@ plugins {
 }
 
 ext {
-    LIB_GROUP_ID = 'net.github.amaterasu'
+    LIB_GROUP_ID = 'com.github.amaterasu'
     LIB_ARTIFACT_ID = 'scopey'
     LIB_VERSION = file('version.txt').text.trim()
     LIB_DESCRIPTION = 'Provides an ability to scoped non-VM components like presenter to the lifecycle of its creator.'
